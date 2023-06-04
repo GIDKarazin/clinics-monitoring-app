@@ -42,6 +42,7 @@ Hospital app
 | POST        | /patientcards/new      | {code: 'GH2468', description: '!?!'}            | Creates a new patient card with the payload            |
 | PUT/PATCH   | /patientcards/:id/edit | {code: 'HG8642', description: '?!?'}            | Updates patient card with specific id with the payload |
 | DELETE      | /patientcards/:id      | {id: 77}                                        | Deletes patient card with the given id                 |
+<<<<<<< HEAD
 | GET         | /                      | {}                                              | Shows all main and authentication links                |
 | POST        | /users/sign_up         | {email: 'example@gmail.com', password: 'pass'}  | Creates a new user with the payload                    |
 | DELETE      | /users/                | {}                                              | Deletes the current user with ending of user's session |
