@@ -12,7 +12,7 @@ end
 Specialty.create!(specialties_to_create)
 
 # create clinics
-10.times do
+50.times do
   clinic = Clinic.create!(
     name: Faker::Company.name,
     email: Faker::Internet.unique.email,
