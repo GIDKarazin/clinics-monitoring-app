@@ -14,11 +14,25 @@ class PatientsControllerTest < ActionDispatch::IntegrationTest
       email = Faker::Internet.unique.email
     end
     @patient = Patient.create(name: 'Patient P1', birthdate: Faker::Date.birthday(min_age: 16, max_age: 100), email: email, phone: '+380123456789', address: '123 Adr1 st')
+    11.times do |i|
+      while User.exists?(email: email)
+        email = Faker::Internet.unique.email
+      end
+      while Patient.exists?(email: email)
+        email = Faker::Internet.unique.email
+      end
+      patient = Patient.create(name: "Patient P#{i + 2}", birthdate: Faker::Date.birthday(min_age: 16, max_age: 100), email: email, phone: "+380#{i + 2}0000000", address: '234 Adr2 st')
+    end
   end
 
   test "should get index" do
     get patients_url
     assert_response :success
+    assert_select 'table tr', count: 11 # assuming there are 10 records per page
+    assert_select 'a', '2' # assuming there is a link to the second page
+    get patients_url(page: 2)
+    assert_response :success
+    assert_select 'table tr', count: 3 # assuming there are 2 records on the second page
   end
 
   test "should get show" do

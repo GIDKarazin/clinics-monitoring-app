@@ -1,6 +1,19 @@
 class DepartmentsController < ApplicationController
+
   def index
-    @departments = Department.all
+    @departments = DepartmentQuery.new(Department.page(params[:page]).per(10))
+    @departments = @departments.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @departments = @departments.search(:name, params[:name]) if params[:name].present?
+    @departments = @departments.result
+  end
+  
+  def search
+    @departments = DepartmentQuery.new(Department.page(params[:page]).per(10))
+    @departments = @departments.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @departments = @departments.search(:name, params[:name]) if params[:name].present?
+    @departments = @departments.result
+
+    render :index
   end
 
   def show

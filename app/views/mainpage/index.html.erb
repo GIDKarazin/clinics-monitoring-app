@@ -8,11 +8,14 @@
   <%= link_to 'View specialties', specialties_path, class: "button" %>
   <%= link_to 'View patients', patients_path, class: "button" %>
   <%= link_to 'View patient cards', patient_cards_path, class: "button" %>
-
+  
   <% if user_signed_in? %>
     <p>Logged in as <%= current_user.email %></p>
     <%= form_tag destroy_user_session_path, method: :delete do %>
       <%= submit_tag "Log out", class: "button" %>
+    <% end %>
+    <%= form_for(current_user, url: registration_path(current_user), html: { method: :delete }) do |f| %>
+      <%= f.submit "Delete my account", class: "button" %>
     <% end %>
   <% else %>
     <%= link_to "Sign in", '/users/sign_in', class: "button" %>

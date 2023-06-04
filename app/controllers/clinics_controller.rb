@@ -1,11 +1,98 @@
 class ClinicsController < ApplicationController
-  
-  def index
-    @clinics = Clinic.all
-  end
 
+  def index
+    clinics = Clinic.all
+
+    if params[:sort].present?
+      clinics = case params[:sort]
+      when "id"
+        clinics.order!(id: params[:direction])
+      when "departments_count"
+        clinics.left_outer_joins(:departments)
+               .group(:id)
+               .order!("COUNT(departments.id) #{params[:direction] == 'desc' ? 'DESC' : 'ASC'}")
+      when "doctors_count"
+        clinics.left_outer_joins(:doctors)
+               .group(:id)
+               .order!("COUNT(doctors.id) #{params[:direction] == 'desc' ? 'DESC' : 'ASC'}")
+      when "name"
+        clinics.order!(name: params[:direction])
+      end
+    end
+
+    @clinics = ClinicQuery.new(clinics.page(params[:page]).per(10))
+    @clinics = @clinics.search(:name, params[:name]) if params[:name].present?
+    @clinics = @clinics.result
+  end
+  
+  def search
+    clinics = Clinic.all
+
+    if params[:sort].present?
+      clinics = case params[:sort]
+      when "id"
+        clinics.order!(id: params[:direction])
+      when "departments_count"
+        clinics.left_outer_joins(:departments)
+               .group(:id)
+               .order!("COUNT(departments.id) #{params[:direction] == 'desc' ? 'DESC' : 'ASC'}")
+      when "doctors_count"
+        clinics.left_outer_joins(:doctors)
+               .group(:id)
+               .order!("COUNT(doctors.id) #{params[:direction] == 'desc' ? 'DESC' : 'ASC'}")
+      when "name"
+        clinics.order!(name: params[:direction])
+      end
+    end
+
+    @clinics = ClinicQuery.new(clinics.page(params[:page]).per(10))
+    @clinics = @clinics.search(:name, params[:name]) if params[:name].present?
+    @clinics = @clinics.result
+
+    render :index
+  end
+  
   def show
     @clinic = Clinic.find(params[:id])
+    patients = @clinic.patients.page(params[:page]).per(10)
+
+    if params[:sort].present?
+      patients = case params[:sort]
+      when "id"
+        patients.order(id: params[:direction])
+      when "name"
+        patients.order(name: params[:direction])
+      when "birthdate"
+        patients.order(birthdate: params[:direction])
+      when "phone"
+        patients.order(phone: params[:direction])
+      else
+        patients
+      end
+    end
+
+    @patients = PatientQuery.new(patients)
+    @patients = @patients.search(:name, params[:name]) if params[:name].present?
+    @patients = @patients.search(:age, params[:age]) if params[:age].present?
+    @patients = @patients.search(:phone, params[:phone]) if params[:phone].present?
+    @patients = @patients.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patients = @patients.result
+
+    @patientcards = PatientCard.where(patient_id: @patients.map(&:id)).index_by(&:patient_id)
+  end
+
+  def searchshow
+    @clinic = Clinic.find(params[:id])
+    @patients = PatientQuery.new(@clinic.patients.page(params[:page]).per(10))
+    @patients = @patients.search(:name, params[:name]) if params[:name].present?
+    @patients = @patients.search(:age, params[:age]) if params[:age].present?
+    @patients = @patients.search(:phone, params[:phone]) if params[:phone].present?
+    @patients = @patients.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patients = @patients.result
+
+    @patientcards = PatientCard.where(clinic_id: @clinic.id, patient_id: @patients.pluck(:id)).index_by(&:patient_id)
+
+    render :show
   end
 
   def new
@@ -55,6 +142,6 @@ class ClinicsController < ApplicationController
   private
 
   def clinic_params
-    params.require(:clinic).permit(:name, :email, :phone, :address)
+    params.require(:clinic).permit(:name, :email, :phone, :address, :year_of_establishment)
   end
 end

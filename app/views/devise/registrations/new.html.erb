@@ -6,7 +6,7 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <%= f.label :email, class: "label" %></em>
-  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field" %><br>
+  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field", placeholder: "example@gmail.com" %><br>
 
   <%= f.label :password, class: "label" %>
   <%= f.password_field :password, autocomplete: "new-password", class: "input-field", placeholder: "#{@minimum_password_length} characters minimum" %><br>

@@ -1,6 +1,19 @@
 class DoctorsController < ApplicationController
+
   def index
-    @doctors = Doctor.all
+    @doctors = DoctorQuery.new(Doctor.page(params[:page]).per(10))
+    @doctors = @doctors.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @doctors = @doctors.search(:name, params[:name]) if params[:name].present?
+    @doctors = @doctors.result
+  end
+  
+  def search
+    @doctors = DoctorQuery.new(Doctor.page(params[:page]).per(10))
+    @doctors = @doctors.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @doctors = @doctors.search(:name, params[:name]) if params[:name].present?
+    @doctors = @doctors.result
+
+    render :index
   end
 
   def show
@@ -13,7 +26,7 @@ class DoctorsController < ApplicationController
 
   def create
     @doctor = Doctor.new(doctor_params)
-
+ 
     if @doctor.save
       redirect_to doctor_path(@doctor)
     else

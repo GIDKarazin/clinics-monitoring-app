@@ -10,13 +10,21 @@ class DepartmentsControllerTest < ActionDispatch::IntegrationTest
     end
     @user = User.create(email: email, password: 'password')
     sign_in @user
-    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st')
+    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
     @department = Department.create!(name: 'Department1', description: 'Description1', clinic_id: @clinic.id)
+    11.times do |i|
+      Department.create(name: "Department#{i + 2}", description: "Description#{i + 2}", clinic_id: @clinic.id)
+    end
   end
 
   test "should get index" do
     get departments_url
     assert_response :success
+    assert_select 'table tr', count: 11 # assuming there are 10 records per page
+    assert_select 'a', '2' # assuming there is a link to the second page
+    get departments_url(page: 2)
+    assert_response :success
+    assert_select 'table tr', count: 3 # assuming there are 2 records on the second page
   end
 
   test "should get show" do

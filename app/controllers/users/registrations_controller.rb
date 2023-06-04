@@ -26,7 +26,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def destroy
-   super
+    sign_out(resource)
+    resource.destroy
+    set_flash_message! :notice, :destroyed
+    redirect_to root_path
   end
 
   def cancel

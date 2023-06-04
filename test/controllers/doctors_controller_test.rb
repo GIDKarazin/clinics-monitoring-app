@@ -10,7 +10,7 @@ class DoctorsControllerTest < ActionDispatch::IntegrationTest
     end
     @user = User.create(email: email, password: 'password')
     sign_in @user
-    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st')
+    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
     @department = Department.create(name: 'Cardiac Surgery', description: 'description1', clinic_id: @clinic.id)
     @specialty = Specialty.create(name: 'Cardiology', description: 'description1')
     @doctor = Doctor.create!(
@@ -21,11 +21,25 @@ class DoctorsControllerTest < ActionDispatch::IntegrationTest
       specialty_id: @specialty.id,
       department_id: @department.id
     )
+    11.times do |i|
+      while User.exists?(email: email)
+        email = Faker::Internet.unique.email
+      end
+      while Doctor.exists?(email: email)
+        email = Faker::Internet.unique.email
+      end
+      Doctor.create(name: "Doctor D#{i + 2}", email: email, phone: "+380#{i + 3}0000000", biography: Faker::Lorem.paragraph, specialty_id: @specialty.id, department_id: @department.id)
+    end
   end
 
   test "should get index" do
     get doctors_url
     assert_response :success
+    assert_select 'table tr', count: 11 # assuming there are 10 records per page
+    assert_select 'a', '2' # assuming there is a link to the second page
+    get doctors_url(page: 2)
+    assert_response :success
+    assert_select 'table tr', count: 3 # assuming there are 2 records on the second page
   end
 
   test "should get new" do

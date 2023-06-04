@@ -1,6 +1,18 @@
 class SpecialtiesController < ApplicationController
   def index
-    @specialties = Specialty.all
+    @specialties = SpecialtyQuery.new(Specialty.page(params[:page]).per(10))
+    @specialties = @specialties.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @specialties = @specialties.search(:name, params[:name]) if params[:name].present?
+    @specialties = @specialties.result
+  end
+  
+  def search
+    @specialties = SpecialtyQuery.new(Specialty.page(params[:page]).per(10))
+    @specialties = @specialties.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @specialties = @specialties.search(:name, params[:name]) if params[:name].present?
+    @specialties = @specialties.result
+
+    render :index
   end
 
   def show

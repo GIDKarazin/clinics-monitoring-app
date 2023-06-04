@@ -1,33 +1,66 @@
 <%= stylesheet_link_tag 'view' %>
 
-<h1> Certain Clinic </h1>
+<h1>Clinic info</h1>
 
 <table>
-  <tr>
-    <td> ID: </td>
-    <td> <%= @clinic.id %> </td>
-  </tr>
-  <tr>
-    <td> Name: </td>
-    <td> <%= @clinic.name %> </td>
-  </tr>
-  <tr>
-    <td> Email: </td>
-    <td> <%= @clinic.email %> </td>
-  </tr>
-  <tr>
-    <td> Phone: </td>
-    <td> <%= @clinic.phone %> </td>
-  </tr>
-  <tr>
-    <td> Address: </td>
-    <td> <%= @clinic.address %> </td>
-  </tr>
+  <thead>
+    <tr>
+      <th style="width: 120px;">
+        <%= label_tag "id", "Patient ID" %>
+        <%= link_to params[:sort] == "id" && params[:direction] == "asc" ? "▼" : "▲", { sort: "id", direction: (params[:sort] == "id" && params[:direction] == "asc") ? "desc" : "asc" }, class: "sort-icon #{params[:sort] == "id" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="width: 220px;">
+        <%= form_tag(clinics_search_show_path(@clinic.id), method: "get") do %>
+          <%= label_tag "name", "Name" %>
+          <%= text_field_tag "name", params[:name], placeholder: "Search...", size: 4 %>
+          <%= submit_tag "Search", class: "small-button" %>
+          <%= link_to params[:sort] == "name" && params[:direction] == "asc" ? "▼" : "▲", { sort: "name", direction: (params[:sort] == "name" && params[:direction] == "asc") ? "desc" : "asc" }, class: "sort-icon #{params[:sort] == "name" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+        <% end %>
+      </th>
+      <th style="width: 280px;">
+        <%= form_tag(clinics_search_show_path(@clinic.id), method: "get") do %>
+          <%= label_tag "age", "Patient Age" %>
+          <%= text_field_tag "age", params[:age], placeholder: "Search...", size: 4 %>
+          <%= submit_tag "Search", class: "small-button" %>
+          <%= link_to params[:sort] == "birthdate" && params[:direction] == "asc" ? "▼" : "▲", { sort: "birthdate", direction: (params[:sort] == "birthdate" && params[:direction] == "asc") ? "desc" : "asc" }, class: "sort-icon #{params[:sort] == "birthdate" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+        <% end %>
+      </th>
+      <th style="width: 90px;">
+        <%= label_tag "card_code", "Card Code" %>
+      </th>
+      <th style="width: 240px;">
+        <%= form_tag(clinics_search_show_path(@clinic.id), method: "get") do %>
+          <%= label_tag "phone", "Phone" %>
+          <%= text_field_tag "phone", params[:phone], placeholder: "Search...", size: 4 %>
+          <%= submit_tag "Search", class: "small-button" %>
+          <%= link_to params[:sort] == "phone" && params[:direction] == "asc" ? "▼" : "▲", { sort: "phone", direction: (params[:sort] == "phone" && params[:direction] == "asc") ? "desc" : "asc" }, class: "sort-icon #{params[:sort] == "phone" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+        <% end %>
+      </th>
+      <th colspan="2">Data interaction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @patients.each do |patient| %>
+      <tr>
+        <td><%= patient.id %></td>
+        <td><%= patient.name %></td>
+        <td><%= calculate_age(patient.birthdate) %></td>
+        <td><%= @patientcards[patient.id].code %></td>
+        <td><%= patient.phone %></td>
+        <td>
+          <%= link_to Doctor.find_by(id: @patientcards[patient.id]&.doctor_id)&.name, doctor_path(@patientcards[patient.id]&.doctor_id), class: "button" if @patientcards[patient.id] %>
+        </td>
+        <td><%= link_to "Show", patient_path(patient), class: "button" %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 <br>
 
+<%= paginate @patients %>
+
 <div class="links-container">
-  <%= link_to 'Edit', edit_clinic_path(@clinic), class: "bottom-button" %>
-  <%= link_to 'Back', clinics_path, class: "bottom-button" %>
+  <%= link_to 'Back to clinics', clinics_path, class: "bottom-button" %>
+  <%= link_to 'Main page', '/', class: "bottom-button" %>
 </div>

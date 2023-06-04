@@ -6,7 +6,7 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <%= f.label :email, class: "label" %>
-  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field" %><br>
+  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field", placeholder: "example@gmail.com" %><br>
 
   <%= f.submit "Send me reset password instructions", class: "button" %><br>
 <% end %>

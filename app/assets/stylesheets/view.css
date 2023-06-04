@@ -11,9 +11,9 @@ h1 {
 }
 
 table {
+  table-layout: fixed;
   border-collapse: collapse;
-  width: 100%;
-  max-width: 1500px;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -23,6 +23,7 @@ td {
   text-align: left;
   vertical-align: top;
   border: 1px solid #ccc;
+  word-wrap: break-word
 }
 
 th {
@@ -34,7 +35,7 @@ td:first-of-type {
   font-weight: bold;
 }
 
-td:last-of-type {
+td:nth-last-child(-n+3) {
   text-align: center;
 }
 
@@ -45,6 +46,22 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.sort-icon {
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.input-field {
+  display: inline-block;
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .button {
@@ -63,24 +80,6 @@ a:hover {
   width: auto;
 }
 
-.button:hover {
-  background-color: #005baa;
-}
-
-.button:active {
-  background-color: #004080;
-  transform: scale(0.95);
-}
-
-.links-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .bottom-button {
   font-family: Georgia, serif;
   font-size: 14px;
@@ -96,4 +95,91 @@ a:hover {
   margin: 10px auto; /* add this line */
   text-align: center;
   border: 1px solid #000;
+}
+
+.button:hover, .bottom-button:hover {
+  background-color: #005baa;
+}
+
+.button:active, .bottom-button:active {
+  background-color: #004080;
+  transform: scale(0.95);
+}
+
+.sort-icon:active {
+  transform: scale(0.65); 
+}
+
+.links-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination a {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #0072c6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+  margin: 0 5px;
+  border: 1px solid #000;
+}
+
+.pagination a span {
+  color: white;
+}
+
+.pagination .active a,
+.pagination .active a span {
+  background-color: #005baa;
+}
+
+.pagination a:hover {
+  background-color: #005baa;
+}
+
+.pagination a:active {
+  background-color: #004080;
+  transform: scale(0.95);
+}
+
+.small-button {
+  font-family: Georgia, serif;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #0072c6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+  margin: 0;
+  border: 1px solid #000;
+  width: auto;
+}
+
+.small-button:hover {
+  background-color: #005baa;
+}
+
+.small-button:active {
+  background-color: #004080;
+  transform: scale(0.95);
 }

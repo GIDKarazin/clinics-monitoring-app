@@ -11,11 +11,19 @@ class SpecialtiesControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(email: email, password: 'password')
     sign_in @user
     @specialty = Specialty.create!(name: 'Specialty1', description: 'Description1')
+    11.times do |i|
+      Specialty.create!(name: "Specialty#{i + 2}", description: "Description1#{i + 2}")
+    end
   end
 
   test "should get index" do
     get specialties_url
     assert_response :success
+    assert_select 'table tr', count: 11 # assuming there are 10 records per page
+    assert_select 'a', '2' # assuming there is a link to the second page
+    get specialties_url(page: 2)
+    assert_response :success
+    assert_select 'table tr', count: 3 # assuming there are 2 records on the second page
   end
 
   test "should get show" do
