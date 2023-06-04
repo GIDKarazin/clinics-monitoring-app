@@ -10,6 +10,7 @@
   <%= link_to 'View patient cards', patient_cards_path, class: "button" %>
   
   <% if user_signed_in? %>
+    <%= link_to 'Users private info (PDF)', users_download_pdf_path, class: "button" %>
     <p>Logged in as <%= current_user.email %></p>
     <%= form_tag destroy_user_session_path, method: :delete do %>
       <%= submit_tag "Log out", class: "button" %>

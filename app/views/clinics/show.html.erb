@@ -61,6 +61,7 @@
 <%= paginate @patients %>
 
 <div class="links-container">
+  <%= link_to 'Clinic info (PDF)', clinics_download_pdf_with_id_path, class: "bottom-button" %>
   <%= link_to 'Back to clinics', clinics_path, class: "bottom-button" %>
   <%= link_to 'Main page', '/', class: "bottom-button" %>
 </div>
