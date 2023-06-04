@@ -250,6 +250,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kaminari
+  nokogiri
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
   rails-controller-testing

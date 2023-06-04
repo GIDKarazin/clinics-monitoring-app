@@ -4,7 +4,7 @@ class Clinic < ApplicationRecord
 	has_many :patient_cards, dependent: :destroy
 	has_many :patients, through: :patient_cards
 
-	validates :name, presence: true, length: { maximum: 50 }
+	validates :name, presence: true, length: { maximum: 1000 }
 	validates :email, presence: true, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP, message: "Incorrect email format!" }
 	validates :phone, presence: true, length: { maximum: 20 }, format: { with: /\A\+?\d+\z/, message: "Incorrect phone format!" }
 	validates :address, presence: true, length: { maximum: 100 }
