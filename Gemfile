@@ -22,6 +22,8 @@ gem "prawn-table"
 
 gem "thread"
 
+gem "image_processing"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
