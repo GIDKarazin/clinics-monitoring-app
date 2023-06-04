@@ -1,0 +1,21 @@
+<%= stylesheet_link_tag 'devise' %>
+
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <%= f.label :email, class: "label" %></em>
+  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field" %><br>
+
+  <%= f.label :password, class: "label" %>
+  <%= f.password_field :password, autocomplete: "new-password", class: "input-field", placeholder: "#{@minimum_password_length} characters minimum" %><br>
+
+  <%= f.label :password_confirmation, class: "label" %>
+  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-field", placeholder: "Also #{@minimum_password_length} characters minimum" %><br>
+
+  <%= f.submit "Sign up", class: "button" %><br>
+  
+<% end %>
+
+<%= link_to 'Log in', new_user_session_path, class: "button" %>

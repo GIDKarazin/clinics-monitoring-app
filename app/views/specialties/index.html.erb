@@ -1,0 +1,32 @@
+<%= stylesheet_link_tag 'view' %>
+
+<h1>All Specialties</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3">Data interraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @specialties.each do |specialty| %>
+      <tr>
+        <td><%= specialty.id %></td>
+        <td><%= specialty.name %></td>
+        <td><%= specialty.description %></td>
+        <td><%= link_to 'Show', specialty_path(specialty), class: "button" %></td>
+        <td><%= link_to 'Edit', edit_specialty_path(specialty), class: "button" %></td>
+        <td><%= button_to 'Delete', specialty_path(specialty), method: :delete, data: { confirm: 'Are you sure?' }, class: "button" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="links-container">
+  <%= link_to 'New Specialty', new_specialty_path, class: "bottom-button" %>
+  <%= link_to 'Main page', '/', class: "bottom-button" %>
+</div>

@@ -1,0 +1,34 @@
+<%= stylesheet_link_tag 'view' %>
+
+<h1>All Patient Cards</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Clinic ID</th>
+      <th>Patient ID</th>
+      <th colspan="3">Data interraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @patientcards.each do |patientcard| %>
+      <tr>
+        <td><%= patientcard.id %></td>
+        <td><%= patientcard.code %></td>
+        <td><%= patientcard.description %></td>
+        <td><%= patientcard.clinic_id %></td>
+        <td><%= patientcard.patient_id %></td>
+        <td><%= link_to 'Show', patient_card_path(patientcard), class: "button" %></td>
+        <td><%= link_to 'Edit', edit_patient_card_path(patientcard), class: "button" %></td>
+        <td><%= button_to 'Delete', patient_card_path(patientcard), method: :delete, data: { confirm: 'Are you sure?' }, class: "button" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<div class="links-container">
+  <%= link_to 'New Patient Card', new_patient_card_path, class: "bottom-button" %>
+  <%= link_to 'Main page', '/', class: "bottom-button" %>
+</div>

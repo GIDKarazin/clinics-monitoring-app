@@ -1,17 +1,61 @@
-clinic1 = Clinic.create(name: "Clinic A", address: "7 Top St")
-clinic2 = Clinic.create(name: "Clinic B", address: "3 Bottom St")
+require 'faker'
 
-department1 = Department.create(name: "Cardiology", clinic: clinic1)
-department2 = Department.create(name: "Dermatology", clinic: clinic2)
+100.times do
+	Clinic.create!(
+		name: Faker::Company.name,
+		email: Faker::Internet.unique.email,
+		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
+		address: "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
+	)
+end
 
-specialty1 = Specialty.create(name: "Cardiologist")
-specialty2 = Specialty.create(name: "Dermatologist")
+department_list = ["Cardiology", "Dermatology", "Endocrinology", "Gastroenterology", "Hematology", "Neurology", "Oncology", "Pediatrics", "Psychiatry", "Radiology", "Urology"]
+100.times do
+	clinic = Clinic.order("RANDOM()").first
+	Department.create(
+		name: department_list.sample,
+		description: Faker::Lorem.paragraph,
+		clinic_id: clinic.id		
+	)
+end
 
-doctor1 = Doctor.create(name: "James Aaa", specialty: specialty1, department: department1)
-doctor2 = Doctor.create(name: "Jane Bbb", specialty: specialty2, department: department2)
+specialty_list = ["Cardiologist", "Dermatologist", "Endocrinologist", "Gastroenterologist", "Hematologist", "Neurologist", "Oncologist", "Pediatrist", "Psychiatrist", "Radiologist", "Urologist"]
+100.times do
+	specialty = specialty_list.sample
+	Specialty.create!(
+		name: specialty,
+		description: Faker::Lorem.paragraph(sentence_count: 5)
+	)
+end
 
-patient1 = Patient.create(name: "Aaa Johnson", birthdate: "2010-10-10")
-patient2 = Patient.create(name: "Bbb Williams", birthdate: "2005-05-05")
+100.times do
+	department = Department.order("RANDOM()").first
+	specialty = Specialty.order("RANDOM()").first
 
-PatientCard.create(patient: patient1, clinic: clinic1, code: "PC1234")
-PatientCard.create(patient: patient2, clinic: clinic2, code: "PC4321")
+	Doctor.create!(
+		name: Faker::Name.name,
+		email: Faker::Internet.unique.email,
+		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
+		biography: Faker::Lorem.paragraphs(number: 3).join("\n\n"),
+		department_id: department.id,
+		specialty_id: specialty.id
+	)
+end
+
+100.times do
+	patient = Patient.create!(
+		name: Faker::Name.name,
+		birthdate: Faker::Date.birthday(min_age: 16, max_age: 100),
+		email: Faker::Internet.unique.email,
+		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
+		address: "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
+	)
+	clinic = Clinic.order("RANDOM()").first
+
+	PatientCard.create(
+		code: Faker::Base.regexify("^[A-Z]{2}[0-9]{4}$"),
+		description: Faker::Lorem.paragraph,
+		clinic_id: clinic.id,
+		patient_id: patient.id
+	)
+end

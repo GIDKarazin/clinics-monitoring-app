@@ -1,0 +1,24 @@
+<%= stylesheet_link_tag 'change' %>
+
+<h1>New Patient</h1>
+
+<%= form_for @patient do |f| %>
+  <%= f.label :name, class: "label" %>
+  <%= f.text_field :name, class: "input-field" %><br>
+
+  <%= f.label :birthdate, class: "label" %>
+  <%= f.text_field :birthdate, class: "input-field" %><br>
+
+  <%= f.label :email, class: "label" %>
+  <%= f.text_field :email, class: "input-field" %><br>
+
+  <%= f.label :phone, class: "label" %>
+  <%= f.text_field :phone, class: "input-field" %><br>
+
+  <%= f.label :address, class: "label" %>
+  <%= f.text_field :address, class: "input-field" %><br>
+
+  <%= f.submit "Create", class: "button" %>
+
+  <div id="error-message" class="large-label"></div>
+<% end %>

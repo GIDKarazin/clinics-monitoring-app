@@ -1,0 +1,29 @@
+<%= stylesheet_link_tag 'view' %>
+
+<h1> Certain Department </h1>
+
+<table>
+  <tr>
+    <td> ID: </td>
+    <td> <%= @department.id %> </td>
+  </tr>
+  <tr>
+    <td> Name: </td>
+    <td> <%= @department.name %> </td>
+  </tr>
+  <tr>
+    <td> Description: </td>
+    <td> <%= @department.description %> </td>
+  </tr>
+  <tr>
+    <td> Clinic ID: </td>
+    <td> <%= @department.clinic_id %> </td>
+  </tr>
+</table>
+
+<br>
+
+<div class="links-container">
+  <%= link_to 'Edit', edit_department_path(@department), class: "bottom-button" %>
+  <%= link_to 'Back', departments_path, class: "bottom-button" %>
+</div>

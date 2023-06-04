@@ -1,6 +1,29 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get '/', to: 'mainpage#index'
+  
+  root 'mainpage#index'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  devise_for :users, controllers: { registrations: "users/registrations" }
+  
+  resources :clinics do
+    resources :departments
+  end
+  
+  resources :departments do
+    resources :doctors
+  end
+  
+  resources :departments do
+    resources :patient_cards
+  end
+  
+  resources :patient_cards
+
+  resources :patients
+  
+  resources :doctors do
+    resources :specialties
+  end
+  
+  resources :specialties
 end
