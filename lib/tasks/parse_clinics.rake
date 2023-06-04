@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
 require 'faker'
+require 'csv'
 
 namespace :parse do
   desc 'Parse clinics name and add random records with these names to the clinics table'
@@ -17,13 +18,27 @@ namespace :parse do
       phone = Faker::PhoneNumber.cell_phone_in_e164.delete("+")
       address = "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
       year_of_establishment = Faker::Number.between(from: 1600, to: 2023)
-
+      city = Faker::Address.city
+      facility_type = Faker::Lorem.word
+      rating_mortality = case Faker::Number.between(from: 0, to: 3)
+        when 1
+          'Below'
+        when 2
+          'Same'
+        when 3
+          'Above'
+        when 0
+          'None'
+      end
       Clinic.create!(
         name: name,
         email: email,
         phone: phone,
         address: address,
-        year_of_establishment: year_of_establishment
+        year_of_establishment: year_of_establishment,
+        city: city,
+        facility_type: facility_type,
+        rating_mortality: rating_mortality
       )
     end
 
@@ -54,13 +69,27 @@ namespace :parse do
       phone = Faker::PhoneNumber.cell_phone_in_e164.delete("+")
       address = "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
       year_of_establishment = Faker::Number.between(from: 1600, to: 2023)
-
+      city = Faker::Address.city
+      facility_type = Faker::Lorem.word
+      rating_mortality = case Faker::Number.between(from: 0, to: 3)
+        when 1
+          'Below'
+        when 2
+          'Same'
+        when 3
+          'Above'
+        when 0
+          'None'
+      end
       clinic = Clinic.create!(
         name: name,
         email: email,
         phone: phone,
         address: address,
-        year_of_establishment: year_of_establishment
+        year_of_establishment: year_of_establishment,
+        facility_type: facility_type,
+        city: city,
+        rating_mortality: rating_mortality
       )
       amount = Faker::Number.between(from: 2, to: 4)
       department_names = department_list.shuffle.take(amount)
@@ -121,7 +150,36 @@ namespace :parse do
         end
       end
     end
+    puts "Clinics parsed and records added to the clinics (and others) table(s): #{clinic_list.length}"
+  end
+  
+  desc "Import clinics data from CSV"
+  task :csv_clinics => :environment do
+    file_path = 'C:/clinics-monitoring-app/hospitals.csv'
+    clinics_length = 0
+    CSV.foreach(file_path, headers: true) do |row|
+      facility_name = row['Facility.Name']
+      email = Faker::Internet.unique.email
+      phone = Faker::PhoneNumber.cell_phone_in_e164.delete("+")
+      address = "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
+      year_of_establishment = Faker::Number.between(from: 1600, to: 2023)
+      city = row['Facility.City']
+      facility_type = row['Facility.Type']
+      rating_mortality = row['Rating.Mortality']
+      clinics_length = clinics_length + 1
 
-    puts "Clinics parsed and records added to the clinics table: #{clinic_list.length}"
+      Clinic.create!(
+        name: facility_name,
+        email: email,
+        phone: phone,
+        address: address,
+        year_of_establishment: year_of_establishment,
+        facility_type: facility_type,
+        city: city,
+        rating_mortality: rating_mortality
+      )
+    end
+
+    puts "Clinics parsed from cvs and records added to the clinics table: #{clinics_length}"
   end
 end

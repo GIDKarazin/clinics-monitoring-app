@@ -18,6 +18,15 @@
   <%= f.label :year_of_establishment, class: "label" %>
   <%= f.text_field :year_of_establishment, class: "input-field", placeholder: "1600-2023" %><br>
 
+  <%= f.label :facility_type, class: "label" %>
+  <%= f.text_field :facility_type, class: "input-field", placeholder: "Clinic type" %><br>
+
+  <%= f.label :city, class: "label" %>
+  <%= f.text_field :city, class: "input-field", placeholder: "c. Zubrowka" %><br>
+
+  <%= f.label :rating_mortality, class: "label" %>
+  <%= f.text_field :rating_mortality, class: "input-field", placeholder: "Describe impression" %><br>
+
   <%= f.submit "Create", class: "button" %>
 
   <div id="error-message" class="large-label"></div>

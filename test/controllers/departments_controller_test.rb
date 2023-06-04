@@ -10,7 +10,7 @@ class DepartmentsControllerTest < ActionDispatch::IntegrationTest
     end
     @user = User.create(email: email, password: 'password')
     sign_in @user
-    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
+    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975', facility_type: 'Clinic1 type', city: 'c. Zubrowka', rating_mortality: 'None')
     @department = Department.create!(name: 'Department1', description: 'Description1', clinic_id: @clinic.id)
     11.times do |i|
       Department.create(name: "Department#{i + 2}", description: "Description#{i + 2}", clinic_id: @clinic.id)

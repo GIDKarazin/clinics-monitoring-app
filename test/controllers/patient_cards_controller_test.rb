@@ -13,7 +13,7 @@ class PatientCardsControllerTest < ActionDispatch::IntegrationTest
     while User.exists?(email: email)
       email = Faker::Internet.unique.email
     end
-    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
+    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975', facility_type: 'Clinic1 type', city: 'c. Zubrowka', rating_mortality: 'None')
     @patient = Patient.create(name: 'Patient P1', birthdate: Faker::Date.birthday(min_age: 16, max_age: 100), email: email, phone: '+380234567891', address: '234 Adr2 st')
     @department = Department.create(name: 'Therapy', description: 'description1', clinic_id: @clinic.id)
     @specialty = Specialty.create(name: 'Therapist', description: 'description2')

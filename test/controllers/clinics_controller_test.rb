@@ -13,7 +13,7 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
     while User.exists?(email: email)
       email = Faker::Internet.unique.email
     end
-    @clinic = Clinic.create(name: 'Clinic1', email: email, phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
+    @clinic = Clinic.create(name: 'Clinic1', email: email, phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975', facility_type: 'Clinic1 type', city: 'c. Zubrowka', rating_mortality: 'None')
     11.times do |i|
       while User.exists?(email: email)
         email = Faker::Internet.unique.email
@@ -21,7 +21,7 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
       while Clinic.exists?(email: email)
         email = Faker::Internet.unique.email
       end
-      Clinic.create(name: "Clinic#{i + 2}", email: email, phone: "+380123456789", address: "123 Adr#{i + 1} st", year_of_establishment: "1975")
+      Clinic.create(name: "Clinic#{i + 2}", email: email, phone: "+380123456789", address: "123 Adr#{i + 1} st", year_of_establishment: "1975", facility_type: "Clinic#{i + 2} type", city: 'c. Zubrowka', rating_mortality: 'None')
     end
   end
 
@@ -47,7 +47,7 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create clinic" do
     assert_difference('Clinic.count', 1) do
-      post clinics_url, params: { clinic: { name: @clinic.name, email: @clinic.email, phone: @clinic.phone, address: @clinic.address, year_of_establishment: @clinic.year_of_establishment } }
+      post clinics_url, params: { clinic: { name: @clinic.name, email: @clinic.email, phone: @clinic.phone, address: @clinic.address, year_of_establishment: @clinic.year_of_establishment, facility_type: @clinic.facility_type, city: @clinic.city, rating_mortality: @clinic.rating_mortality } }
     end
 
     assert_redirected_to clinic_url(Clinic.last)
@@ -61,18 +61,30 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
   test "should update clinic" do
     patch clinic_url(@clinic), params: {
       clinic: {
-        name: 'Clinic2',
+        name: 'Clinic0',
         email: Faker::Internet.unique.email,
         phone: '+380234567891',
         address: "#{Faker::Address.street_address} #{Faker::Address.street_name} St",
-        year_of_establishment: '2023'
+        year_of_establishment: '2023',
+        facility_type: 'Clinic0 type',
+        city: 't. Zubrowka',
+        rating_mortality: case Faker::Number.between(from: 0, to: 3)
+        when 1
+          'Below'
+        when 2
+          'Same'
+        when 3
+          'Above'
+        when 0
+          'None'
+      end
       }
     }
     assert_redirected_to clinic_url(@clinic)
     
     @clinic.reload
     
-    assert_equal 'Clinic2', @clinic.name
+    assert_equal 'Clinic0', @clinic.name
   end
 
   test "should destroy clinic" do

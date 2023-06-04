@@ -10,7 +10,7 @@ class DoctorsControllerTest < ActionDispatch::IntegrationTest
     end
     @user = User.create(email: email, password: 'password')
     sign_in @user
-    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975')
+    @clinic = Clinic.create(name: 'Clinic1', email: 'clinic1@gmail.com', phone: '+380123456789', address: '123 Adr1 st', year_of_establishment: '1975', facility_type: 'Clinic1 type', city: 'c. Zubrowka', rating_mortality: 'None')
     @department = Department.create(name: 'Cardiac Surgery', description: 'description1', clinic_id: @clinic.id)
     @specialty = Specialty.create(name: 'Cardiology', description: 'description1')
     @doctor = Doctor.create!(
