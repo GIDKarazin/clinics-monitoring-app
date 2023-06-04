@@ -1,6 +1,19 @@
 class PatientsController < ApplicationController
+
   def index
-    @patients = Patient.all
+    @patients = PatientQuery.new(Patient.page(params[:page]).per(10))
+    @patients = @patients.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patients = @patients.search(:name, params[:name]) if params[:name].present?
+    @patients = @patients.result
+  end
+  
+  def search
+    @patients = PatientQuery.new(Patient.page(params[:page]).per(10))
+    @patients = @patients.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patients = @patients.search(:name, params[:name]) if params[:name].present?
+    @patients = @patients.result
+
+    render :index
   end
 
   def show

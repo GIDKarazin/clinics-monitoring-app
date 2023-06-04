@@ -1,18 +1,43 @@
 <%= stylesheet_link_tag 'view' %>
 
-<h1>All Doctors</h1>
+<h1>View doctors</h1>
 
 <table>
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Biography</th>
-      <th>Department ID</th>
-      <th>Specialty ID</th>
-      <th colspan="3">Data interraction</th>
+      <th style="width: 55px;">
+        <%= label_tag "id", "ID" %>
+        <%= link_to params[:sort] == "id" && params[:direction] == "asc" ? "▼" : "▲", { sort: "id", direction: params[:sort] == "id" && params[:direction] == "asc" ? "desc" : "asc", id: params[:id] }, class: "sort-icon #{params[:sort] == "id" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="width: 220px;">
+        <%= form_tag(doctors_search_path, method: "get") do %>
+          <%= label_tag "name", "Name" %>
+          <%= text_field_tag "name", params[:name], placeholder: "Search...", size: 4 %>
+          <%= submit_tag "Search", class: "small-button" %>
+          <%= link_to params[:sort] == "name" && params[:direction] == "asc" ? "▼" : "▲", { sort: "name", direction: params[:sort] == "name" && params[:direction] == "asc" ? "desc" : "asc", name: params[:name] }, class: "sort-icon #{params[:sort] == "name" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+        <% end %>
+      </th>
+      <th style="width: 125px;">
+        <%= label_tag "email", "Email" %>
+        <%= link_to params[:sort] == "email" && params[:direction] == "asc" ? "▼" : "▲", { sort: "email", direction: params[:sort] == "email" && params[:direction] == "asc" ? "desc" : "asc", email: params[:email] }, class: "sort-icon #{params[:sort] == "email" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="width: 135px">
+        <%= label_tag "phone", "Phone" %>
+        <%= link_to params[:sort] == "phone" && params[:direction] == "asc" ? "▼" : "▲", { sort: "phone", direction: params[:sort] == "phone" && params[:direction] == "asc" ? "desc" : "asc", phone: params[:phone] }, class: "sort-icon #{params[:sort] == "phone" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="min-width: 160px; width: auto;">
+        <%= label_tag "biography", "Biography" %>
+        <%= link_to params[:sort] == "biography" && params[:direction] == "asc" ? "▼" : "▲", { sort: "biography", direction: params[:sort] == "biography" && params[:direction] == "asc" ? "desc" : "asc", biography: params[:biography] }, class: "sort-icon #{params[:sort] == "biography" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="width: 150px;">
+        <%= label_tag "department_id", "Department ID" %>
+        <%= link_to params[:sort] == "department_id" && params[:direction] == "asc" ? "▼" : "▲", { sort: "department_id", direction: params[:sort] == "department_id" && params[:direction] == "asc" ? "desc" : "asc", department_id: params[:department_id] }, class: "sort-icon #{params[:sort] == "department_id" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th style="width: 135px;">
+        <%= label_tag "specialty_id", "Specialty ID" %>
+        <%= link_to params[:sort] == "specialty_id" && params[:direction] == "asc" ? "▼" : "▲", { sort: "specialty_id", direction: params[:sort] == "specialty_id" && params[:direction] == "asc" ? "desc" : "asc", specialty_id: params[:specialty_id] }, class: "sort-icon #{params[:sort] == "specialty_id" ? (params[:direction] == "asc" ? "asc" : "desc") : ""}" %>
+      </th>
+      <th colspan="3" style="width: 270px;">Data interraction</th>
     </tr>
   </thead>
   <tbody>
@@ -34,6 +59,9 @@
 </table>
 
 <br>
+
+<%= paginate @doctors %>
+
 <div class="links-container">
   <%= link_to 'New Doctor', new_doctor_path, class: "bottom-button" %>
   <%= link_to 'Main page', '/', class: "bottom-button" %>

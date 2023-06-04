@@ -1,6 +1,19 @@
 class PatientCardsController < ApplicationController
+
   def index
-    @patientcards = PatientCard.all
+    @patientcards = PatientCardQuery.new(PatientCard.page(params[:page]).per(10))
+    @patientcards = @patientcards.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patientcards = @patientcards.search(:code, params[:code]) if params[:code].present?
+    @patientcards = @patientcards.result
+  end
+  
+  def search
+    @patientcards = PatientCardQuery.new(PatientCard.page(params[:page]).per(10))
+    @patientcards = @patientcards.sort(params[:sort], params[:direction]) if params[:sort].present?
+    @patientcards = @patientcards.search(:code, params[:code]) if params[:code].present?
+    @patientcards = @patientcards.result
+
+    render :index
   end
 
   def show
@@ -44,6 +57,6 @@ class PatientCardsController < ApplicationController
   private
 
   def patient_card_params
-    params.require(:patient_card).permit(:code, :description, :clinic_id, :patient_id)
+    params.require(:patient_card).permit(:code, :description, :clinic_id, :patient_id, :doctor_id)
   end
 end

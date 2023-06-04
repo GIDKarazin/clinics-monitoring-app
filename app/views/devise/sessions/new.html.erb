@@ -4,7 +4,7 @@
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <%= f.label :email, class: "label" %>
-    <%= f.email_field :email, class: "input-field", autofocus: true, autocomplete: "email" %><br>
+    <%= f.email_field :email, class: "input-field", autofocus: true, autocomplete: "email", placeholder: "example@gmail.com" %><br>
 
     <%= f.label :password, class: "label" %>
     <%= f.password_field :password, class: "input-field", autocomplete: "current-password" %>
