@@ -20,6 +20,8 @@ gem "prawn"
 
 gem "prawn-table"
 
+gem "thread"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

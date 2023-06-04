@@ -18,13 +18,27 @@ namespace :parse do
       phone = Faker::PhoneNumber.cell_phone_in_e164.delete("+")
       address = "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
       year_of_establishment = Faker::Number.between(from: 1600, to: 2023)
-
+      city = Faker::Address.city
+      facility_type = Faker::Lorem.word
+      rating_mortality = case Faker::Number.between(from: 0, to: 3)
+        when 1
+          'Below'
+        when 2
+          'Same'
+        when 3
+          'Above'
+        when 0
+          'None'
+      end
       Clinic.create!(
         name: name,
         email: email,
         phone: phone,
         address: address,
-        year_of_establishment: year_of_establishment
+        year_of_establishment: year_of_establishment,
+        city: city,
+        facility_type: facility_type,
+        rating_mortality: rating_mortality
       )
     end
 
@@ -140,7 +154,7 @@ namespace :parse do
   end
   
   desc "Import clinics data from CSV"
-  task :cvs_clinics => :environment do
+  task :csv_clinics => :environment do
     file_path = 'C:/clinics-monitoring-app/hospitals.csv'
     clinics_length = 0
     CSV.foreach(file_path, headers: true) do |row|
