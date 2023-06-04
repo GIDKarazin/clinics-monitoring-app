@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_204650) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_19_143335) do
   create_table "clinics", force: :cascade do |t|
     t.string "name"
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.string "phone"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -23,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_204650) do
     t.integer "clinic_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["clinic_id"], name: "index_departments_on_clinic_id"
   end
 
@@ -32,6 +35,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_204650) do
     t.integer "department_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.string "phone"
+    t.text "biography"
     t.index ["department_id"], name: "index_doctors_on_department_id"
     t.index ["specialty_id"], name: "index_doctors_on_specialty_id"
   end
@@ -42,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_204650) do
     t.integer "patient_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["clinic_id"], name: "index_patient_cards_on_clinic_id"
     t.index ["patient_id"], name: "index_patient_cards_on_patient_id"
   end
@@ -51,12 +58,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_204650) do
     t.date "birthdate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.string "phone"
+    t.string "address"
   end
 
   create_table "specialties", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
   end
 
   add_foreign_key "departments", "clinics"

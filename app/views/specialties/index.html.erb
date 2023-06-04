@@ -1,0 +1,20 @@
+<h1>All Specialties</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Specialty.all.each do |specialty| %>
+      <tr>
+        <td><%= specialty.id %></td>
+        <td><%= specialty.name %></td>
+        <td><%= specialty.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
