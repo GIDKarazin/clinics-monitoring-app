@@ -1,0 +1,24 @@
+<h1>All Doctors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Biography</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Doctor.all.each do |doctor| %>
+      <tr>
+        <td><%= doctor.id %></td>
+        <td><%= doctor.name %></td>
+        <td><%= doctor.email %></td>
+        <td><%= doctor.phone %></td>
+        <td><%= doctor.biography %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

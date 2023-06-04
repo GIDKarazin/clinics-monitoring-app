@@ -1,0 +1,20 @@
+<h1>All Departments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Department.all.each do |department| %>
+      <tr>
+        <td><%= department.id %></td>
+        <td><%= department.name %></td>
+        <td><%= department.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

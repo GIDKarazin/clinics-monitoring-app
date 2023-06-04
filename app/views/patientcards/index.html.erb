@@ -1,0 +1,20 @@
+<h1>All Patient Cards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Code</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% PatientCard.all.each do |patientcard| %>
+      <tr>
+        <td><%= patientcard.id %></td>
+        <td><%= patientcard.code %></td>
+        <td><%= patientcard.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
