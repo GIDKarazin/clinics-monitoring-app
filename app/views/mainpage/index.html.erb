@@ -8,10 +8,19 @@
   <%= link_to 'View specialties', specialties_path, class: "button" %>
   <%= link_to 'View patients', patients_path, class: "button" %>
   <%= link_to 'View patient cards', patient_cards_path, class: "button" %>
+  <%= link_to 'Users private info (PDF)', users_download_pdf_path, class: "button" %>
   
   <% if user_signed_in? %>
-    <%= link_to 'Users private info (PDF)', users_download_pdf_path, class: "button" %>
-    <p>Logged in as <%= current_user.email %></p>
+    <% @user = current_user %>
+      <div class="user-info">
+        <% if @user.avatar.attached? %>
+          <%= image_tag url_for(@user.avatar), alt: "Icon1", width: 50, height: 50 %>
+        <% else %>
+          <%= image_tag asset_path('user_info.png'), alt: "Icon2", width: 50, height: 50 %>
+        <% end %>
+        <p>Logged in as <%= current_user.email %></p>
+      </div>
+    <%= button_to "Edit my account", edit_user_registration_path(current_user), method: :get, class: "button" %>
     <%= form_tag destroy_user_session_path, method: :delete do %>
       <%= submit_tag "Log out", class: "button" %>
     <% end %>
