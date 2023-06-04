@@ -1,13 +1,29 @@
 Rails.application.routes.draw do
-  resources :clinics
+  get '/', to: 'mainpage#index'
   
-  resources :departments
+  root 'mainpage#index'
 
-  resources :doctors
-
-  resources :patients
-
+  devise_for :users, controllers: { registrations: "users/registrations" }
+  
+  resources :clinics do
+    resources :departments
+  end
+  
+  resources :departments do
+    resources :doctors
+  end
+  
+  resources :departments do
+    resources :patient_cards
+  end
+  
   resources :patient_cards
 
+  resources :patients
+  
+  resources :doctors do
+    resources :specialties
+  end
+  
   resources :specialties
 end

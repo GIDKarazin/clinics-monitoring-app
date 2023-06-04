@@ -3,7 +3,7 @@ require 'faker'
 100.times do
 	Clinic.create!(
 		name: Faker::Company.name,
-		email: Faker::Internet.email,
+		email: Faker::Internet.unique.email,
 		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
 		address: "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
 	)
@@ -34,7 +34,7 @@ end
 
 	Doctor.create!(
 		name: Faker::Name.name,
-		email: Faker::Internet.email,
+		email: Faker::Internet.unique.email,
 		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
 		biography: Faker::Lorem.paragraphs(number: 3).join("\n\n"),
 		department_id: department.id,
@@ -46,7 +46,7 @@ end
 	patient = Patient.create!(
 		name: Faker::Name.name,
 		birthdate: Faker::Date.birthday(min_age: 16, max_age: 100),
-		email: Faker::Internet.email,
+		email: Faker::Internet.unique.email,
 		phone: Faker::PhoneNumber.cell_phone_in_e164.gsub("+", ""),
 		address: "#{Faker::Address.street_address} #{Faker::Address.street_name} St"
 	)

@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'view' %>
+
 <h1> Certain Specialty </h1>
 
 <table>
@@ -15,9 +17,11 @@
     <td> Description: </td>
     <td> <%= @specialty.description %> </td>
   </tr>
+
 </table>
 
 <br>
-
-<%= link_to 'Edit', edit_specialty_path(@specialty) %> |
-<%= link_to 'Back', specialties_path %>
+<div class="links-container">
+  <%= link_to 'Edit', edit_specialty_path(@specialty), class: "bottom-button" %> |
+  <%= link_to 'Back', specialties_path, class: "bottom-button" %>
+</div>

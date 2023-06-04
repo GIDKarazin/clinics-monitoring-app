@@ -42,15 +42,23 @@ Hospital app
 | POST        | /patientcards/new      | {code: 'GH2468', description: '!?!'}            | Creates a new patient card with the payload            |
 | PUT/PATCH   | /patientcards/:id/edit | {code: 'HG8642', description: '?!?'}            | Updates patient card with specific id with the payload |
 | DELETE      | /patientcards/:id      | {id: 77}                                        | Deletes patient card with the given id                 |
+<<<<<<< HEAD
+| GET         | /                      | {}                                              | Shows all main and authentication links                |
+| POST        | /users/sign_up         | {email: 'example@gmail.com', password: 'pass'}  | Creates a new user with the payload                    |
+| DELETE      | /users/                | {}                                              | Deletes the current user with ending of user's session |
+| POST        | /users/sign_in         | {email: 'example@gmail.com', password: 'pass'}  | Starts a new session for the user with the payload     |
+| DELETE      | /users/sign_out        | {}                                              | Ends the session for the current user                  |
+| POST        | /users/password/new    | {email: 'example@gmail.com'}                    | Sends a password change message to the specific email  |
+| DELETE      | /users/sign_out        | {}                                              | Ends the session for the current user                  |
 
 ## ERD diagram
- +-----------+       +-----------------+       +---------+       +----------------+       +--------------------+       +----------------+
- | Patients  |  1:1  | PatientCards    |  N:1  | Clinics |  1:N  | Departments    |  1:N  | Doctors            |  N:1  | Specialties    |
- +-----------+<----->+-----------------+------>+---------+<------+----------------+<------+--------------------+------>+----------------+
- | id (PK)   |       | id (PK)         |       | id (PK) |       | id (PK)        |       | id (PK)            |       | id (PK)        |
- | name      |       | code            |       | name    |       | name           |       | name               |       | name           |
- | birthdate |       | description     |       | email   |       | description    |       | email              |       | description    |
- | email     |       | clinic_id (FK)  |       | phone   |       | clinic_id (FK) |       | phone              |       +----------------+
+ +-----------+       +-----------------+       +---------+       +----------------+       +--------------------+       +----------------+ +--------------------+
+ | Patients  |  1:1  | PatientCards    |  N:1  | Clinics |  1:N  | Departments    |  1:N  | Doctors            |  N:1  | Specialties    | | Users              |
+ +-----------+<----->+-----------------+------>+---------+<------+----------------+<------+--------------------+------>+----------------+ +--------------------+
+ | id (PK)   |       | id (PK)         |       | id (PK) |       | id (PK)        |       | id (PK)            |       | id (PK)        | | id (PK)            |
+ | name      |       | code            |       | name    |       | name           |       | name               |       | name           | | email              |
+ | birthdate |       | description     |       | email   |       | description    |       | email              |       | description    | | encrypted_password |
+ | email     |       | clinic_id (FK)  |       | phone   |       | clinic_id (FK) |       | phone              |       +----------------+ +--------------------+
  | phone     |       | patient_id (FK) |       | address |       +----------------+       | biography          |
  | address   |       +-----------------+       +---------+                                | department_id (FK) |
  +-----------+                                                                            | specialty_id (FK)  |
@@ -65,3 +73,4 @@ Hospital app
 Пацієнти (поля на вибір У карті може бути 1 пацієнт)
 - [] Task 2 --> Вставити 100 записів у таблиці. У 3 таблиці зробити методи, які будуть обгорткою на чистому SQL. У 3 інші таблиці просто на ОРМ. Зробити по 2 SQL VIEW.
 - [] Task 3 --> Написати Readme.md файл. Зробити CRUD форми під кожну модель.
+- [] Task 4 --> Додати гем Devise до вашого веб застосунку (повинна бути можливість зареєструватись/залогінитись/відновити пароль). Додати тести. Додати CSS/JS.

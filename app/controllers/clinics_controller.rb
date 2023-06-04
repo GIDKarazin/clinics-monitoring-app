@@ -1,4 +1,5 @@
 class ClinicsController < ApplicationController
+  
   def index
     @clinics = Clinic.all
   end
@@ -14,9 +15,14 @@ class ClinicsController < ApplicationController
   def create
     @clinic = Clinic.new(clinic_params)
 
-    if @clinic.save
-      redirect_to clinic_path(@clinic)
-    else
+    begin
+      if @clinic.save
+        redirect_to clinic_path(@clinic)
+      else
+        render :new
+      end
+    rescue ActiveRecord::RecordNotUnique => e
+      flash[:error] = "An error occurred: #{e.message}"
       render :new
     end
   end
@@ -28,9 +34,14 @@ class ClinicsController < ApplicationController
   def update
     @clinic = Clinic.find(params[:id])
 
-    if @clinic.update(clinic_params)
-      redirect_to clinic_path(@clinic)
-    else
+    begin
+      if @clinic.update(clinic_params)
+        redirect_to clinic_path(@clinic)
+      else
+        render :edit
+      end
+    rescue ActiveRecord::RecordNotUnique => e
+      flash[:error] = "An error occurred: #{e.message}"
       render :edit
     end
   end

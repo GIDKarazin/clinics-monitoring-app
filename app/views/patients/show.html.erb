@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'view' %>
+
 <h1> Certain Patient </h1>
 
 <table>
@@ -30,9 +32,12 @@
     <td> Address: </td>
     <td> <%= @patient.address %> </td>
   </tr>
+
 </table>
 
 <br>
 
-<%= link_to 'Edit', edit_patient_path(@patient) %> |
-<%= link_to 'Back', patients_path %>
+<div class="links-container">
+  <%= link_to 'Edit', edit_patient_path(@patient), class: "bottom-button" %> |
+  <%= link_to 'Back', patients_path, class: "bottom-button" %>
+</div>

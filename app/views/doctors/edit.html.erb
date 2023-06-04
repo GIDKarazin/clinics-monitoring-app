@@ -1,23 +1,27 @@
+<%= stylesheet_link_tag 'change' %>
+
 <h1>Edit Doctor</h1>
 
 <%= form_for @doctor do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %><br>
+  <%= f.label :name, class: "label" %>
+  <%= f.text_field :name, class: "input-field" %><br>
 
-  <%= f.label :email %>
-  <%= f.text_field :email %><br>
+  <%= f.label :email, class: "label" %>
+  <%= f.text_field :email, class: "input-field" %><br>
 
-  <%= f.label :phone %>
-  <%= f.text_field :phone %><br>
+  <%= f.label :phone, class: "label" %>
+  <%= f.text_field :phone, class: "input-field" %><br>
 
-  <%= f.label :biography %>
-  <%= f.text_field :biography %><br>
+  <%= f.label :biography, class: "label" %>
+  <%= f.text_field :biography, class: "input-field" %><br>
 
-  <%= f.label :department_id %>
-  <%= f.number_field :department_id %><br>
+  <%= f.label :department_id, class: "label" %>
+  <%= f.number_field :department_id, class: "input-field" %><br>
 
-  <%= f.label :specialty_id %>
-  <%= f.number_field :specialty_id %><br>
+  <%= f.label :specialty_id, class: "label" %>
+  <%= f.number_field :specialty_id, class: "input-field" %><br>
 
-  <%= f.submit "Update" %>
+  <%= f.submit "Update", class: "button" %>
+
+  <div id="error-message" class="large-label"></div>
 <% end %>

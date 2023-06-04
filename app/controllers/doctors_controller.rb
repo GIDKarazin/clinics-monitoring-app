@@ -31,6 +31,7 @@ class DoctorsController < ApplicationController
     if @doctor.update(doctor_params)
       redirect_to doctor_path(@doctor)
     else
+      puts @doctor.errors.full_messages
       render :edit
     end
   end
