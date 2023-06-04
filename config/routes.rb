@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   get '/', to: 'mainpage#index'
 
   get 'clinics/search', to: 'clinics#search', as: 'clinics_search'
+  get 'clinics/download_csv', to: 'clinics#download_csv', as: 'clinics_download_csv'
+  get 'clinics/download_pdf', to: 'clinics#download_pdf', as: 'clinics_download_pdf'
+  get 'clinics/:id/download_pdf/', to: 'clinics#download_pdf_with_id', as: 'clinics_download_pdf_with_id'
+  get 'users/download_pdf/', to: 'mainpage#download_pdf', as: 'users_download_pdf'
   get 'clinics/:id/searchshow', to: 'clinics#searchshow', as: 'clinics_search_show'
   get 'departments/search', to: 'departments#search', as: 'departments_search'
   get 'doctors/search', to: 'doctors#search', as: 'doctors_search'

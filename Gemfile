@@ -16,6 +16,10 @@ gem "kaminari"
 
 gem "nokogiri"
 
+gem "prawn"
+
+gem "prawn-table"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
