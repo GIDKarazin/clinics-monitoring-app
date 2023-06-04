@@ -28,6 +28,21 @@
     <%= f.text_field :year_of_establishment, class: "input-field inline", placeholder: "1600-2023" %><br>
   </div>
 
+  <div>
+    <%= f.label :facility_type, class: "label" %>
+    <%= f.text_field :facility_type, class: "input-field inline", placeholder: "Clinic type" %><br>
+  </div>
+
+  <div>
+    <%= f.label :city, class: "label" %>
+    <%= f.text_field :city, class: "input-field inline", placeholder: "c. Zubrowka" %><br>
+  </div>
+
+  <div>
+    <%= f.label :rating_mortality, class: "label" %>
+    <%= f.text_field :rating_mortality, class: "input-field inline", placeholder: "1-5" %><br>
+  </div>
+
   <%= f.submit "Update", class: "button" %><br>
 
   <div id="error-message" class="large-label"></div>
