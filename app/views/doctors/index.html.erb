@@ -1,0 +1,36 @@
+<h1>All Doctors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Biography</th>
+      <th>Department ID</th>
+      <th>Specialty ID</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @doctors.each do |doctor| %>
+      <tr>
+        <td><%= doctor.id %></td>
+        <td><%= doctor.name %></td>
+        <td><%= doctor.email %></td>
+        <td><%= doctor.phone %></td>
+        <td><%= doctor.biography %></td>
+        <td><%= doctor.department_id %></td>
+        <td><%= doctor.specialty_id %></td>
+        <td><%= link_to 'Show', doctor_path(doctor) %></td>
+        <td><%= link_to 'Edit', edit_doctor_path(doctor) %></td>
+        <td><%= button_to 'Delete', doctor_path(doctor), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Doctor', new_doctor_path %>

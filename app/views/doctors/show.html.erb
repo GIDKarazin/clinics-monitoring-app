@@ -1,0 +1,42 @@
+<h1> Certain Doctor </h1>
+
+<table>
+  <tr>
+    <td> ID: </td>
+    <td> <%= @doctor.id %> </td>
+  </tr>
+
+  <tr>
+    <td> Name: </td>
+    <td> <%= @doctor.name %> </td>
+  </tr>
+
+  <tr>
+    <td> Email: </td>
+    <td> <%= @doctor.email %> </td>
+  </tr>
+
+  <tr>
+    <td> Phone: </td>
+    <td> <%= @doctor.phone %> </td>
+  </tr>
+
+  <tr>
+    <td> Biography: </td>
+    <td> <%= @doctor.biography %> </td>
+  </tr>
+
+  <tr>
+    <td> Department ID: </td>
+    <td> <%= @doctor.department_id %> </td>
+  </tr>
+
+  <tr>
+    <td> Specialty ID: </td>
+    <td> <%= @doctor.specialty_id %> </td>
+  </tr>
+
+</table>
+
+<%= link_to 'Edit', edit_doctor_path(@doctor) %> |
+<%= link_to 'Back', doctors_path %>

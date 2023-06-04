@@ -1,0 +1,39 @@
+<h1> Certain Patient </h1>
+
+<table>
+  <tr>
+    <td> ID: </td>
+    <td> <%= @patient.id %> </td>
+  </tr>
+
+  <tr>
+    <td> Name: </td>
+    <td> <%= @patient.name %> </td>
+  </tr>
+
+  <tr>
+    <td> Birthdate: </td>
+    <td> <%= @patient.birthdate %> </td>
+  </tr>
+
+  <tr>
+    <td> Email: </td>
+    <td> <%= @patient.email %> </td>
+  </tr>
+
+  <tr>
+    <td> Phone: </td>
+    <td> <%= @patient.phone %> </td>
+  </tr>
+
+  <tr>
+    <td> Address: </td>
+    <td> <%= @patient.address %> </td>
+  </tr>
+
+</table>
+
+<br>
+
+<%= link_to 'Edit', edit_patient_path(@patient) %> |
+<%= link_to 'Back', patients_path %>
