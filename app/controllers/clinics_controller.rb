@@ -1,6 +1,7 @@
 require 'csv'
 require 'prawn'
 require 'prawn/table'
+require 'thread'
 
 class ClinicsController < ApplicationController
 
@@ -112,59 +113,152 @@ class ClinicsController < ApplicationController
   end
 
   def download_csv
+    mutex = Mutex.new
+    threads = []
     filename = "All_clinics_and_patients.csv"
 
     csv_headers = ["Clinic Name", "Clinic Email", "Clinic Phone", "Clinic Address", "Year of Establishment", "Facility Type", "City", "Rating (Mortality)", "Department Count", "Doctor Count", "Patient Name", "Patient Email", "Patient Phone", "Patient Address", "Patient Birthdate"]
 
-    CSV.open(filename, "wb") do |csv|
-      csv << csv_headers
+    Tempfile.open(filename) do |tempfile|
+      CSV.open(tempfile, "wb") do |csv|
+        csv << csv_headers
 
-      Clinic.includes(:patients).find_each do |clinic|
-        clinic_data = [
-          clinic.name,
-          clinic.email,
-          clinic.phone,
-          clinic.address,
-          clinic.year_of_establishment,
-          clinic.facility_type,
-          clinic.city,
-          clinic.rating_mortality,
-          clinic.departments.count,
-          clinic.doctors.count
-        ]
-        csv << clinic_data
-        clinic.patients.each_with_index do |patient, index|
-          patient_data = [
-            patient.name,
-            patient.email,
-            patient.phone,
-            patient.address,
-            patient.birthdate
+        Clinic.includes(:patients).find_each do |clinic|
+          clinic_data = [
+            clinic.name,
+            clinic.email,
+            clinic.phone,
+            clinic.address,
+            clinic.year_of_establishment,
+            clinic.facility_type,
+            clinic.city,
+            clinic.rating_mortality,
+            clinic.departments.count,
+            clinic.doctors.count
           ]
-          csv << patient_data
+          csv << clinic_data
+
+          clinic.patients.each_with_index do |patient, index|
+            patient_data = [
+              patient.name,
+              patient.email,
+              patient.phone,
+              patient.address,
+              patient.birthdate
+            ]
+            csv << patient_data
+          end
         end
       end
-    end
 
-    send_file filename, filename: filename, type: "application/csv"
+      threads << Thread.new do
+        mutex.synchronize do
+          send_file tempfile.path, filename: filename, type: "application/csv"
+        end
+      end
+
+      threads.each(&:join)
+    end
   end
 
   def download_pdf
+    mutex = Mutex.new
+    threads = []
     filename = "All_clinics_and_patients.pdf"
 
-    Prawn::Document.generate(filename) do |pdf|
-      pdf.font_families.update("Georgia" => {
-        normal: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Regular.ttf",
-        bold: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Bold.ttf"
-      })
-      pdf.font "Georgia"
+    Tempfile.open(filename) do |tempfile|
+      Prawn::Document.generate(tempfile.path) do |pdf|
+        pdf.font_families.update("Georgia" => {
+          normal: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Regular.ttf",
+          bold: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Bold.ttf"
+        })
+        pdf.font "Georgia"
 
-      clinics = Clinic.includes(:patients)
+        clinics = Clinic.includes(:patients)
 
-      clinics.each_with_index do |clinic, index|
+        clinics.each_with_index do |clinic, index|
+          pdf.move_down(10)
+          pdf.text "Clinic #{index + 1} Information", size: 14, style: :bold, align: :center
+
+          clinic_data = [
+            [{ content: 'Info', font_style: :bold }, { content: '', image: "#{Rails.root}/app/assets/images/clinic_info.png", fit: [20, 20] }],
+            ["Clinic name", clinic.name],
+            ["Email", clinic.email],
+            ["Phone", clinic.phone],
+            ["Address", clinic.address],
+            ["Year of Establishment", clinic.year_of_establishment],
+            ["Type", clinic.facility_type],
+            ["City", clinic.city],
+            ["Rating (Mortality)", clinic.rating_mortality],
+            ["Number of departments", clinic.departments.count],
+            ["Number of doctors", clinic.doctors.count]
+          ]
+
+          pdf.table(clinic_data, width: 400, cell_style: { borders: [], padding: [4, 2] })
+
+          if clinic.patients.any?
+            pdf.move_down(10)
+            pdf.text "Patients", size: 14, style: :bold, align: :center
+
+            patient_headers = [
+              { content: "Info", width: 30 },
+              { content: "Name", width: 80 },
+              { content: "Birth", width: 37 },
+              { content: "Email", width: 95 },
+              { content: "Phone", width: 55 },
+              { content: "Address", width: 105 },
+              { content: "Code", width: 55 },
+              { content: "Doctor", width: 93 }
+            ]
+
+            patient_data = clinic.patients.map do |patient|
+              [
+                { content: '', image: "#{Rails.root}/app/assets/images/patient_info.png", fit: [20, 20] },
+                patient.name,
+                patient.birthdate,
+                patient.email,
+                patient.phone,
+                patient.address,
+                patient.patient_card&.code,
+                patient.patient_card&.doctor&.name
+              ]
+            end
+
+            pdf.table([patient_headers] + patient_data, width: 550, cell_style: { borders: [], padding: [4, 2] })
+          end
+
+          pdf.start_new_page if index < clinics.size - 1
+        end
+      end
+
+      threads << Thread.new do
+        mutex.synchronize do
+          send_file tempfile.path, filename: filename, type: "application/pdf"
+        end
+      end
+
+      threads.each(&:join)
+    end
+  end
+
+  def download_pdf_with_id
+    mutex = Mutex.new
+    threads = []
+    
+    clinic = Clinic.find(params[:id])
+    filename = "#{clinic.name}_and_patients.pdf".gsub(' ', '_')
+    
+    threads << Thread.new do
+      Prawn::Document.generate(filename) do |pdf|
+        pdf.font_families.update("Georgia" => {
+          normal: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Regular.ttf",
+          bold: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Bold.ttf"
+        })
+        pdf.font "Georgia"
+    
         pdf.move_down(10)
-        pdf.text "Clinic #{index + 1} Information", size: 14, style: :bold, align: :center
-
+        pdf.text "Clinic Information", size: 14, style: :bold, align: :center
+    
         clinic_data = [
           [{ content: 'Info', font_style: :bold }, { content: '', image: "#{Rails.root}/app/assets/images/clinic_info.png", fit: [20, 20] }],
           ["Clinic name", clinic.name],
@@ -178,13 +272,13 @@ class ClinicsController < ApplicationController
           ["Number of departments", clinic.departments.count],
           ["Number of doctors", clinic.doctors.count]
         ]
-
+    
         pdf.table(clinic_data, width: 400, cell_style: { borders: [], padding: [4, 2] })
-
+    
         if clinic.patients.any?
           pdf.move_down(10)
           pdf.text "Patients", size: 14, style: :bold, align: :center
-
+    
           patient_headers = [
             { content: "Info", width: 30 },
             { content: "Name", width: 80 },
@@ -195,7 +289,7 @@ class ClinicsController < ApplicationController
             { content: "Code", width: 55 },
             { content: "Doctor", width: 93 }
           ]
-
+    
           patient_data = clinic.patients.map do |patient|
             [
               { content: '', image: "#{Rails.root}/app/assets/images/patient_info.png", fit: [20, 20] },
@@ -208,80 +302,17 @@ class ClinicsController < ApplicationController
               patient.patient_card&.doctor&.name
             ]
           end
-
+    
           pdf.table([patient_headers] + patient_data, width: 550, cell_style: { borders: [], padding: [4, 2] })
         end
-
-        pdf.start_new_page if index < clinics.size - 1
+      end
+      
+      mutex.synchronize do
+        send_file filename, filename: filename, type: "application/pdf"
       end
     end
-
-    send_file filename, filename: filename, type: "application/pdf"
-  end
-
-  def download_pdf_with_id
-    clinic = Clinic.find(params[:id])
-    filename = "#{clinic.name}_and_patients.pdf".gsub(' ', '_')
-
-    Prawn::Document.generate(filename) do |pdf|
-      pdf.font_families.update("Georgia" => {
-        normal: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Regular.ttf",
-        bold: "#{Rails.root}/app/assets/fonts/NotoSansGeorgian-Bold.ttf"
-      })
-      pdf.font "Georgia"
-
-      pdf.move_down(10)
-      pdf.text "Clinic Information", size: 14, style: :bold, align: :center
-
-      clinic_data = [
-        [{ content: 'Info', font_style: :bold }, { content: '', image: "#{Rails.root}/app/assets/images/clinic_info.png", fit: [20, 20] }],
-        ["Clinic name", clinic.name],
-        ["Email", clinic.email],
-        ["Phone", clinic.phone],
-        ["Address", clinic.address],
-        ["Year of Establishment", clinic.year_of_establishment],
-        ["Type", clinic.facility_type],
-        ["City", clinic.city],
-        ["Rating (Mortality)", clinic.rating_mortality],
-        ["Number of departments", clinic.departments.count],
-        ["Number of doctors", clinic.doctors.count]
-      ]
-
-      pdf.table(clinic_data, width: 400, cell_style: { borders: [], padding: [4, 2] })
-
-      if clinic.patients.any?
-        pdf.move_down(10)
-        pdf.text "Patients", size: 14, style: :bold, align: :center
-
-        patient_headers = [
-          { content: "Info", width: 30 },
-          { content: "Name", width: 80 },
-          { content: "Birth", width: 37 },
-          { content: "Email", width: 95 },
-          { content: "Phone", width: 55 },
-          { content: "Address", width: 105 },
-          { content: "Code", width: 55 },
-          { content: "Doctor", width: 93 }
-        ]
-
-        patient_data = clinic.patients.map do |patient|
-          [
-            { content: '', image: "#{Rails.root}/app/assets/images/patient_info.png", fit: [20, 20] },
-            patient.name,
-            patient.birthdate,
-            patient.email,
-            patient.phone,
-            patient.address,
-            patient.patient_card&.code,
-            patient.patient_card&.doctor&.name
-          ]
-        end
-
-        pdf.table([patient_headers] + patient_data, width: 550, cell_style: { borders: [], padding: [4, 2] })
-      end
-    end
-
-    send_file filename, filename: filename, type: "application/pdf"
+    
+    threads.each(&:join)
   end
 
   def new
