@@ -5,7 +5,7 @@ class PatientCard < ApplicationRecord
 	validates :code, presence: true, length: { maximum: 10 }, format: { with: /\A[A-Z]{2}\d{4}\z/, message: "Incorrect code format! Example: 'AZ9630'" }
 	validates :description, presence: true, length: { maximum: 1000 }
 
-	def update_name(new_code)
+	def update_code(new_code)
 		query = <<-SQL
 			UPDATE patientcards SET code = ? WHERE id = ?
 		SQL

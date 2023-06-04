@@ -15,5 +15,9 @@
     <td> Description: </td>
     <td> <%= @specialty.description %> </td>
   </tr>
-
 </table>
+
+<br>
+
+<%= link_to 'Edit', edit_specialty_path(@specialty) %> |
+<%= link_to 'Back', specialties_path %>

@@ -1,0 +1,26 @@
+<h1> Certain Patient Card </h1>
+<table>
+  <tr>
+    <td> ID: </td>
+    <td> <%= @patientcard.id %> </td>
+  </tr>
+  <tr>
+    <td> Code: </td>
+    <td> <%= @patientcard.code %> </td>
+  </tr>
+  <tr>
+    <td> Description: </td>
+    <td> <%= @patientcard.description %> </td>
+  </tr>
+  <tr>
+    <td> Clinic ID: </td>
+    <td> <%= @patientcard.clinic_id %> </td>
+  </tr>
+  <tr>
+    <td> Patient ID: </td>
+    <td> <%= @patientcard.patient_id %> </td>
+  </tr>
+</table>
+<br>
+<%= link_to 'Edit', edit_patient_card_path(@patientcard) %> |
+<%= link_to 'Back', patient_cards_path %>
